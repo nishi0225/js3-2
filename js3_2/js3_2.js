@@ -8,15 +8,13 @@ const addTaskTarget = document.getElementById('addTaskTarget');
 const taskList = [];
 //追加Buttonクリック時の処理
 addTaskButton.addEventListener('click', () => {
-  const todo = input.value;
   const todos = {
     id: taskList.length,
-    task: todo,
+    task: input.value,
     status: '作業中'
   }
   taskList.push(todos);
   addShowTask()
-
 })
 
 //入力されたtaskを追加し表示する関数
@@ -40,7 +38,7 @@ const addShowTask = () => {
     tdTaskElement.textContent = todos.task;
     //td要素へButtonを追加
     tdStatusButton.appendChild(createStatusButton());
-    tdDeleteButton.appendChild(createDeleteButton(newTr));
+    tdDeleteButton.appendChild(createDeleteButton(index));
     //td要素をtr要素へ追加
     addTaskTarget.appendChild(tdIdElement);
     addTaskTarget.appendChild(tdTaskElement);
@@ -58,13 +56,15 @@ const createStatusButton = () => {
   return statusButton;
 }
 //削除Buttonを作成する関数
-const createDeleteButton = (newTr) => {
-  const targetId = newTr.rowIndex;
+const createDeleteButton = (index) => {
   const deleteButton = document.createElement('button');
   deleteButton.textContent = '削除'; 
 
   deleteButton.addEventListener('click', () => {
-    taskList.splice(targetId, 1);
+    taskList.splice(index, 1);
+    for (let i = index; i < taskList.length; i++) {
+      taskList[i].id = i;
+    }
     addShowTask();
   })
   return deleteButton;
